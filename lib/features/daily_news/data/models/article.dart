@@ -6,14 +6,14 @@ part 'article.g.dart';
 @JsonSerializable()
 class ArticleModel extends ArticleEntity {
   const ArticleModel({
-    int? id,
-    String? author,
-    String? title,
-    String? description,
-    String? url,
-    String? urlToImage,
-    String? publishedAt,
-    String? content,
+    super.id,
+    super.author,
+    super.title,
+    super.description,
+    super.url,
+    super.urlToImage,
+    super.publishedAt,
+    super.content,
   });
 
   factory ArticleModel.fromJson(Map<String, dynamic> json) =>
