@@ -1,5 +1,6 @@
 import 'package:architecture/features/daily_news/presentation/bloc/article/remote/remote_article_bloc.dart';
 import 'package:architecture/features/daily_news/presentation/bloc/article/remote/remote_article_state.dart';
+import 'package:architecture/features/daily_news/presentation/widgets/article_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,7 +39,9 @@ class DailyNews extends StatelessWidget {
         } else if (state is RemoteArticlesDone) {
           return ListView.builder(
             itemBuilder: (context, index) {
-              return Text('${state.articles?[index].title}');
+              return ArticleWidget(
+                article: state.articles?[index],
+              );
             },
             itemCount: state.articles!.length,
           );
