@@ -24,11 +24,16 @@ initializeDependencies() async {
   // Dependencies
   locator.registerSingleton<NewsApiService>(NewsApiService(locator()));
 
-  locator
-      .registerSingleton<ArticleRepository>(ArticleRepositoryImpl(locator()));
+  locator.registerSingleton<ArticleRepository>(
+      ArticleRepositoryImpl(locator(), locator()));
 
   // UseCases
   locator.registerSingleton<GetArticleUseCase>(GetArticleUseCase(locator()));
+  locator.registerSingleton<GetSavedArticleUseCase>(
+      GetSavedArticleUseCase(locator()));
+  locator.registerSingleton<SaveArticleUseCase>(SaveArticleUseCase(locator()));
+  locator
+      .registerSingleton<DeleteArticleUseCase>(DeleteArticleUseCase(locator()));
 
   // Blocs, bloc 의 경우 상태가 변경될 떄마다 새 인스턴스를 반환하기 때문에 singletone 으로 등록하면 안됨.
   locator

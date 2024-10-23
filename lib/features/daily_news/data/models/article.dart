@@ -34,16 +34,4 @@ class ArticleModel extends ArticleEntity {
         url: entity.url,
         urlToImage: entity.urlToImage);
   }
-
-  // {
-  //   return ArticleModel(
-  //     author: json['author'] ?? "",
-  //     title: json['title'] ?? "",
-  //     description: json['description'] ?? "",
-  //     url: json['url'] ?? "",
-  //     urlToImage: json['urlToImage'] ?? "",
-  //     publishedAt: json['publishedAt'] ?? "",
-  //     content: json['content'] ?? "",
-  //   );
-  // }
 }

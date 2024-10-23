@@ -1,5 +1,6 @@
 import 'package:architecture/core/constants/constants.dart';
 import 'package:architecture/core/resources/data_state.dart';
+import 'package:architecture/features/daily_news/data/datasources/local/app_database.dart';
 import 'package:architecture/features/daily_news/data/datasources/remote/news_api_service.dart';
 import 'package:architecture/features/daily_news/data/models/article.dart';
 import 'package:architecture/features/daily_news/domain/entities/article.dart';
@@ -8,8 +9,9 @@ import 'package:dio/dio.dart';
 
 class ArticleRepositoryImpl extends ArticleRepository {
   final NewsApiService _newsApiService;
+  final AppDatabase _appDatabase;
 
-  ArticleRepositoryImpl(this._newsApiService);
+  ArticleRepositoryImpl(this._newsApiService, this._appDatabase);
 
   @override
   Future<DataState<List<ArticleModel>>> getNewsArticles() async {
@@ -33,5 +35,22 @@ class ArticleRepositoryImpl extends ArticleRepository {
     } on DioException catch (e) {
       return DataFailed(e);
     }
+  }
+
+  @override
+  Future<void> deleteArticle(ArticleEntity article) {
+    _appDatabase.articleDao.deleteArticle(ArticleModel.fromEntity(article));
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<ArticleEntity>> getSavedArticles() {
+    return _appDatabase.articleDao.getArticle();
+  }
+
+  @override
+  Future<void> saveArticle(ArticleEntity article) {
+    _appDatabase.articleDao.insertArticle(ArticleModel.fromEntity(article));
+    throw UnimplementedError();
   }
 }
