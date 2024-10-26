@@ -1,3 +1,4 @@
+import 'package:architecture/core/constants/constants.dart';
 import 'package:architecture/features/daily_news/domain/usecases/delete_article.dart';
 import 'package:architecture/features/daily_news/domain/usecases/get_saved_article.dart';
 import 'package:architecture/features/daily_news/domain/usecases/save_article.dart';
@@ -60,6 +61,7 @@ class DailyNews extends StatelessWidget {
                     locator<DeleteArticleUseCase>()),
                 child: ArticleWidget(
                   article: state.articles?[index],
+                  screenType: ScrType.dailyNews,
                 ),
               );
             },

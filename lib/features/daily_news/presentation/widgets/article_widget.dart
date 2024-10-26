@@ -1,3 +1,4 @@
+import 'package:architecture/core/constants/constants.dart';
 import 'package:architecture/features/daily_news/domain/entities/article.dart';
 import 'package:architecture/features/daily_news/presentation/bloc/article/local/local_article_bloc.dart';
 import 'package:architecture/features/daily_news/presentation/bloc/article/local/local_article_event.dart';
@@ -7,12 +8,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class ArticleWidget extends StatelessWidget {
   final ArticleEntity? article;
+  final ScrType screenType;
 
-  ArticleWidget({super.key, this.article});
+  ArticleWidget({super.key, this.article, required this.screenType});
 
   WebViewController webViewController = WebViewController();
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
@@ -45,7 +48,8 @@ class ArticleWidget extends StatelessWidget {
           children: [
             _buildImage(context, article?.urlToImage),
             _buildTitleAndDescription(context, article?.title,
-                article?.description, article?.publishedAt)
+                article?.description, article?.publishedAt),
+            _buildDeleteButton(context)
           ],
         ),
       ),
@@ -177,5 +181,18 @@ class ArticleWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _buildDeleteButton(BuildContext context) {
+    if (screenType == ScrType.bookmark) {
+      return IconButton(
+          onPressed: () {
+            context.read<LocalArticleBloc>().add(DeleteArticles(article!));
+            context.read<LocalArticleBloc>().add(const GetSavedArticles());
+          },
+          icon: const Icon(Icons.delete_outline_rounded));
+    } else {
+      return const SizedBox(width: 0);
+    }
   }
 }

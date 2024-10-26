@@ -1,3 +1,4 @@
+import 'package:architecture/core/constants/constants.dart';
 import 'package:architecture/features/daily_news/domain/usecases/delete_article.dart';
 import 'package:architecture/features/daily_news/domain/usecases/get_saved_article.dart';
 import 'package:architecture/features/daily_news/domain/usecases/save_article.dart';
@@ -61,6 +62,7 @@ class ArticleBookmark extends StatelessWidget {
               itemBuilder: (context, index) {
                 return ArticleWidget(
                   article: state.articles?[index],
+                  screenType: ScrType.bookmark,
                 );
               },
               itemCount: state.articles?.length,
