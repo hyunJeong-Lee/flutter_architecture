@@ -38,19 +38,20 @@ class ArticleRepositoryImpl extends ArticleRepository {
   }
 
   @override
-  Future<void> deleteArticle(ArticleEntity article) {
+  Future<void> deleteArticle(ArticleEntity article) async {
+    print('deleteArticle');
     _appDatabase.articleDao.deleteArticle(ArticleModel.fromEntity(article));
-    throw UnimplementedError();
   }
 
   @override
   Future<List<ArticleEntity>> getSavedArticles() {
+    print('getSavedArticles');
     return _appDatabase.articleDao.getArticle();
   }
 
   @override
-  Future<void> saveArticle(ArticleEntity article) {
+  Future<void> saveArticle(ArticleEntity article) async {
+    print('saveArticle');
     _appDatabase.articleDao.insertArticle(ArticleModel.fromEntity(article));
-    throw UnimplementedError();
   }
 }

@@ -1,18 +1,18 @@
 import 'package:architecture/features/daily_news/domain/entities/article.dart';
+import 'package:architecture/features/daily_news/presentation/bloc/article/local/local_article_bloc.dart';
+import 'package:architecture/features/daily_news/presentation/bloc/article/local/local_article_event.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class ArticleWidget extends StatelessWidget {
   final ArticleEntity? article;
 
-  ArticleWidget({
-    super.key,
-    this.article,
-  });
+  ArticleWidget({super.key, this.article});
 
   WebViewController webViewController = WebViewController();
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
@@ -28,25 +28,11 @@ class ArticleWidget extends StatelessWidget {
           isScrollControlled: true,
           useSafeArea: true,
           backgroundColor: Colors.transparent,
-          builder: (context) {
-            if (article?.url != null) {
-              return Container(
-                padding: const EdgeInsets.only(top: 60),
-                child: ClipRRect(
-                    borderRadius:
-                        const BorderRadius.vertical(top: Radius.circular(30)),
-                    child: WebViewWidget(
-                      gestureRecognizers: gestureRecognizers,
-                      controller: webViewController
-                        ..setJavaScriptMode(JavaScriptMode.disabled)
-                        ..loadRequest(Uri.parse(article!.url!)),
-                    )),
-              );
-            } else {
-              return const Center(
-                child: Text('Error!'),
-              );
-            }
+          builder: (BuildContext bottomSheetContext) {
+            return BlocProvider<LocalArticleBloc>.value(
+              value: BlocProvider.of<LocalArticleBloc>(context),
+              child: _buildBottomSheet(context),
+            );
           },
         );
       },
@@ -64,6 +50,44 @@ class ArticleWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _buildBottomSheet(BuildContext context) {
+    if (article?.url != null) {
+      return Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Container(
+          padding: const EdgeInsets.only(top: 0),
+          child: ClipRRect(
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(30)),
+              child: WebViewWidget(
+                gestureRecognizers: gestureRecognizers,
+                controller: webViewController
+                  ..setJavaScriptMode(JavaScriptMode.disabled)
+                  ..loadRequest(Uri.parse(article!.url!)),
+              )),
+        ),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.indigo.shade200,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(40)),
+          ),
+          onPressed: () {
+            context.read<LocalArticleBloc>().add(SavedArticles(article!));
+          },
+          child: const Icon(
+            Icons.bookmark_add_outlined,
+            color: Colors.white,
+            size: 30,
+          ),
+        ),
+      );
+    } else {
+      return const Center(
+        child: Text('Error!'),
+      );
+    }
   }
 
   Widget _buildImage(BuildContext context, String? imageSrc) {
