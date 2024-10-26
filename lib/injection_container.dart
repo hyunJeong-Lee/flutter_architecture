@@ -6,6 +6,7 @@ import 'package:architecture/features/daily_news/domain/usecases/delete_article.
 import 'package:architecture/features/daily_news/domain/usecases/get_article.dart';
 import 'package:architecture/features/daily_news/domain/usecases/get_saved_article.dart';
 import 'package:architecture/features/daily_news/domain/usecases/save_article.dart';
+import 'package:architecture/features/daily_news/presentation/bloc/article/local/local_article_bloc.dart';
 import 'package:architecture/features/daily_news/presentation/bloc/article/remote/remote_article_bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
@@ -38,4 +39,7 @@ initializeDependencies() async {
   // Blocs, bloc 의 경우 상태가 변경될 떄마다 새 인스턴스를 반환하기 때문에 singletone 으로 등록하면 안됨.
   locator
       .registerFactory<RemoteArticleBloc>(() => RemoteArticleBloc(locator()));
+
+  locator.registerFactory<LocalArticleBloc>(
+      () => LocalArticleBloc(locator(), locator(), locator()));
 }
